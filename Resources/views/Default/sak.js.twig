@@ -1,0 +1,160 @@
+$(document).ready(function() {
+
+
+
+    $(".date_picker").datepicker({
+            altField: "#datepicker",
+            closeText: 'Fermer',
+            prevText: 'Précédent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+            dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+            weekHeader: 'Sem.',
+            dateFormat: 'dd-mm-yy'
+        }); 
+            
+        $("form input.date").datepicker({
+            altField: "#datepicker",
+            closeText: 'Fermer',
+            prevText: 'Précédent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+            dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+            weekHeader: 'Sem.',
+            dateFormat: 'dd-mm-yy',
+            firstDay:1
+        });
+
+        
+	$('.delete_before_box').click(function() {
+        
+                $('#sak_modal_text_before').html($(this).data('invite'));
+                $('#sak_valid').data("sak_valid",$(this).attr("href"));
+                $('#sak_modal_before').modal('show');        
+                return false ;
+	});
+        
+        
+        $("#sak_valid").click(function() 
+        {
+            window.location.href = $(this).data('sak_valid');
+	});
+
+        
+        
+{# 
+
+        $("#DeleteValid").click(function() {
+             
+              
+            if ($(this).data('url_delete_ajax'))
+            {
+                var zone_to_reload=$(this).data('zone_to_reload');
+                var zone_to_reload_whithid=$(this).data('zone_to_reload_whithid');
+                
+                
+                if (zone_to_reload_whithid)
+                {
+                    $.ajax({
+                    type: "POST",
+                    url: $(this).data('url_delete_ajax'),
+                    dataType: "json",
+                    success: function (response) {
+                        $('#ModalDelete').modal('hide');
+                            ajax_reload_zone_id(zone_to_reload_whithid);
+                    }
+                    ,
+                    error: function (XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        $('#ModalDelete').modal('hide');
+                        alert('Error : ' + errorThrown);
+                    }
+                    }); 
+                }
+                else
+                {
+
+                    $.ajax({
+                    type: "POST",
+                    url: $(this).data('url_delete_ajax'),
+                    dataType: "html",
+                    success: function (response) {
+                        $('#ModalDelete').modal('hide');
+                        if (response)
+                        {
+                            $(zone_to_reload).html(response);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $('#ModalDelete').modal('hide');
+                        alert('Error : ' + errorThrown);
+                        }
+                    }); 
+                    }
+            } 
+            else
+            {
+                window.location.href = $(this).data('url_delete');
+            }
+            
+        });
+
+
+	$('.delete_before_box').click(function() {
+                $('#modal_text_before_delete').html($(this).data('invite'));
+                $('#delete_valid').data("url_delete_ajax",$(this).data('url_delete_ajax'));
+                $('#delete_valid').data("url_delete",$(this).data('url_delete'));
+                $('#delete_valid').data("zone_to_reload",$(this).data('zone_to_reload'));
+                $('#sak_modal_delete').modal('show');        
+	});
+#}         
+        
+
+{# for class_name, conf in confs %}
+    $('.{{class_name| raw}}').DataTable( {
+        "paging": false,
+        "info": false, 
+        {% if conf.order =='desc'%}"order": [[ 0, "desc" ]], 
+{% endif %}
+        {% if not conf.filter %}
+        "bFilter": false,
+        {% endif %}
+        {% if conf.excel  or conf.pdf %}
+        dom: 'Bfrtip',
+        buttons: [
+        {% endif %}
+            {% if conf.excel %}
+            {
+                extend: 'excelHtml5',
+                title: 'Data export'
+            }
+            {% endif %}
+            {% if conf.excel  and conf.pdf %},{% endif %}
+            {% if conf.pdf %}
+            {
+                extend: 'pdfHtml5',
+                title: 'Data export'
+            } 
+            {% endif %}
+        {% if conf.excel  or conf.pdf %}
+        ],
+        {% endif %}
+         
+        "oLanguage": {
+            "sSearch": "{{labels.search}}",
+            "sZeroRecords": "{{labels.noresult}}",
+            }
+
+    } );
+{% endfor #}
+
+
+    } );

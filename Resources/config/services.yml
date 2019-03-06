@@ -1,0 +1,10 @@
+services:
+    saksimple:
+        class: Aldaflux\SwissArmyKnifeBundle\Utils\SAKSimple
+    aldaflux.twig_extension:
+        class: Aldaflux\SwissArmyKnifeBundle\Twig\SAKExtension
+        public: true
+        tags:
+            - { name: twig.extension }
+
+
